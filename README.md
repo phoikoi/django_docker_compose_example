@@ -46,3 +46,18 @@ many people will want to use a CDN for those kinds of things, anyway.  (Hint: lo
 also work for the static files if you want to go that way, but you'll want to rearrange the way
 that the `collectstatic` management command is run, or just ditch the nginx service entirely maybe.
 
+## Creating the initial admin user
+
+Probably the quickest way to do this is to bring up the stack with `docker-compose up`, then
+use `docker ps -a` to find the ID of the `dcms_web` container.  You can then do something
+like the following:
+ 
+```shell
+docker exec -it <container_id_goes_here> /bin/bash
+cd dcms
+./manage.py createsuperuser
+```
+
+... and then follow the prompts from there.  Don't forget to exit from the container when
+you're done.
+
