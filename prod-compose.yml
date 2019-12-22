@@ -1,0 +1,52 @@
+version: '3'
+
+services:
+  db:
+    image: postgres:12.1
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    environment:
+      - POSTGRES_DB=dcms
+      - POSTGRES_USER=dcms
+      - POSTGRES_PASSWORD=dcms
+  redis:
+    image: "redis:alpine"
+  web:
+    build:
+      context: .
+      dockerfile: prod.dockerfile
+    ports:
+      - "8057:8000"
+    depends_on:
+      - db
+      - redis
+      - web_nginx
+    command: /bin/sh /code/run.sh
+  web_nginx:
+    build:
+      context: .
+      dockerfile: prod.dockerfile
+    ports:
+      - "8058:8000"
+    command: /code/prod-nginx.sh
+    # command: /bin/bash -c "/usr/sbin/nginx -c /code/nginx.conf -g 'daemon off;' >/dev/null 2>&1"
+  celery-workers:
+    build:
+      context: .
+      dockerfile: prod.dockerfile
+    command: /bin/bash -c "cd dcms; exec celery -E -A dcms worker -l info"
+    depends_on:
+      - db
+      - redis
+  celery-beat:
+    build:
+      context: .
+      dockerfile: prod.dockerfile
+    command: /bin/bash -c "cd dcms; exec celery -A dcms beat -l info --pidfile /tmp/celerybeat.pid -s /tmp/celerybeat-schedule"
+    depends_on:
+      - db
+      - redis
+volumes:
+  postgres_data:
+
+
