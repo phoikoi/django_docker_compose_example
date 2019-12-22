@@ -6,6 +6,10 @@ research on deployment methods before attempting to deploy a real site.
 Your mileage may vary.  Offer not available in all states, subject to local
 law.  Very slippery when wet.
 
+IN PARTICULAR: Yes, I know the dockerfile runs everything as root.  You should probably
+not do this. You should also definitely not submit an Github issue about this, because
+I already know about it, and so that would just be annoying.
+
 At present, this repo uses Django-CMS as an example.  You can pretty easily replace
 it with whatever Django-using application you want.
 
