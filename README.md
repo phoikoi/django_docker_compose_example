@@ -31,6 +31,11 @@ the `/static` subpath; it doesn't serve anything on the root path.)
 In the local version, there is no Nginx server, and the Django app serves the static files
 and has `DEBUG` enabled, as with a normal `runserver` command, which is exactly what it's running.
 
+Oh yeah, I should probably say something about the workers and other stuff.  This example has
+Celery already included, with workers and a `django-celery-beat` monitor running alongside
+the django app.  It also uses PostgreSQL and Redis (with `django-redis` configured as the default
+cache.)
+
 NOTE: the local top-level directory (where the dockerfiles, etc. are) is mapped to `/code` inside
 the container in the local setup, and the Django app will auto-reload, so you can do your local
 development with the container running.
