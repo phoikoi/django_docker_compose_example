@@ -41,7 +41,7 @@ services:
       dockerfile: local.dockerfile
     environment:
       - LOCAL_ENV=local.env
-    command: /bin/bash -c "cd app; celery -E -A app worker -l info"
+    command: /bin/bash -c "cd app; celery -E -A core worker -l info"
     volumes:
       - .:/code
     depends_on:
@@ -53,7 +53,7 @@ services:
       dockerfile: local.dockerfile
     environment:
       - LOCAL_ENV=local.env
-    command: /bin/bash -c "cd app; celery -A app beat -l info --pidfile /tmp/celerybeat.pid -s /tmp/celerybeat-schedule"
+    command: /bin/bash -c "cd app; celery -A core beat -l info --pidfile /tmp/celerybeat.pid -s /tmp/celerybeat-schedule"
     volumes:
       - .:/code
     depends_on:
