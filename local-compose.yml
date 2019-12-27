@@ -6,9 +6,9 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data/
     environment:
-      - POSTGRES_DB=dcms
-      - POSTGRES_USER=dcms
-      - POSTGRES_PASSWORD=dcms
+      - POSTGRES_DB=app
+      - POSTGRES_USER=app
+      - POSTGRES_PASSWORD=app
   redis:
     image: "redis:alpine"
   web:
@@ -41,7 +41,7 @@ services:
       dockerfile: local.dockerfile
     environment:
       - LOCAL_ENV=local.env
-    command: /bin/bash -c "cd dcms; celery -E -A dcms worker -l info"
+    command: /bin/bash -c "cd app; celery -E -A app worker -l info"
     volumes:
       - .:/code
     depends_on:
@@ -53,7 +53,7 @@ services:
       dockerfile: local.dockerfile
     environment:
       - LOCAL_ENV=local.env
-    command: /bin/bash -c "cd dcms; celery -A dcms beat -l info --pidfile /tmp/celerybeat.pid -s /tmp/celerybeat-schedule"
+    command: /bin/bash -c "cd app; celery -A app beat -l info --pidfile /tmp/celerybeat.pid -s /tmp/celerybeat-schedule"
     volumes:
       - .:/code
     depends_on:

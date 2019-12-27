@@ -52,12 +52,12 @@ that the `collectstatic` management command is run, or just ditch the nginx serv
 ## Creating the initial admin user
 
 Probably the quickest way to do this is to bring up the stack with `docker-compose up`, then
-use `docker ps -a` to find the ID of the `dcms_web` container.  You can then do something
+use `docker ps -a` to find the ID of the `app_web` container.  You can then do something
 like the following:
  
 ```shell
 docker exec -it <container_id_goes_here> /bin/bash
-cd dcms
+cd app
 ./manage.py createsuperuser
 ```
 

@@ -1,5 +1,5 @@
 #!/bin/bash
-pushd dcms
+pushd app
 ./manage.py collectstatic --noinput
 popd
 echo Starting nginx
