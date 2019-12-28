@@ -2,7 +2,7 @@ version: '3'
 
 services:
   db:
-    image: postgres:12.1
+    image: kartoza/postgis:12.0
     volumes:
       - postgres_data:/var/lib/postgresql/data/
     environment:
@@ -17,31 +17,17 @@ services:
       dockerfile: local.dockerfile
     volumes:
       - .:/code
-    environment:
-      - LOCAL_ENV=local.env
     ports:
       - "8057:8000"
     depends_on:
       - db
       - redis
     command: /bin/sh /code/local.sh
-  web_nginx:
-    build:
-      context: .
-      dockerfile: local.dockerfile
-    #    volumes:
-    #  - .:/code
-    ports:
-      - "8058:8000"
-    command: /usr/sbin/nginx -c /code/local-nginx.conf -g "daemon off;"
-    # command: /bin/bash -c "/usr/sbin/nginx -c /code/nginx.conf -g 'daemon off;' >/dev/null 2>&1"
   celery-workers:
     build:
       context: .
       dockerfile: local.dockerfile
-    environment:
-      - LOCAL_ENV=local.env
-    command: /bin/bash -c "cd app; celery -E -A core worker -l info"
+    command: /bin/bash -c "cd app; DEBUG=False celery -E -A core worker -l info"
     volumes:
       - .:/code
     depends_on:
@@ -51,15 +37,25 @@ services:
     build:
       context: .
       dockerfile: local.dockerfile
-    environment:
-      - LOCAL_ENV=local.env
-    command: /bin/bash -c "cd app; celery -A core beat -l info --pidfile /tmp/celerybeat.pid -s /tmp/celerybeat-schedule"
+    command: /bin/bash -c "cd app; DEBUG=False celery -A core beat -l info --pidfile /tmp/celerybeat.pid -s /tmp/celerybeat-schedule"
     volumes:
       - .:/code
     depends_on:
       - db
       - redis
-
+  celery-flower:
+    build:
+      context: .
+      dockerfile: local.dockerfile
+    ports:
+      - "5555:5555"
+    command: /bin/bash -c "cd app; DEBUG=False celery flower -A core"
+    volumes:
+      - .:/code
+    depends_on:
+      - redis
+      - celery-workers
+      - celery-beat
 volumes:
   postgres_data:
 
