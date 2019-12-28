@@ -108,12 +108,15 @@ DATABASES = {
     'default': env.db_url(),
 }
 
+CACHE_SPEC = env.cache_url()
+CACHE_URL = CACHE_SPEC["LOCATION"]
+
 CACHES = {
-    'default': env.cache_url(),
+    'default': CACHE_SPEC,
 }
 
-CELERY_BROKER_URL = 'redis://redis:6379'
-CELERY_RESULT_BACKEND = 'redis://redis:6379'
+CELERY_BROKER_URL = CACHE_URL
+CELERY_RESULT_BACKEND = CACHE_URL
 CELERY_ACCEPT_CONTENT = ['application/json']
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
