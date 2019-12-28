@@ -1,4 +1,4 @@
-# Django docker-compose template/bad example
+# Django docker-compose template/example
 
 This is an example of one way to use Django with docker-compose.  It
 is probably not the best way.  You should definitely do your own
@@ -12,9 +12,6 @@ This is a sandbox, a sketch in process.
 IN PARTICULAR: Yes, I know the dockerfile runs everything as root.  You should probably
 not do this. You should also definitely not submit an Github issue about this, because
 I already know about it, and so that would just be annoying.
-
-At present, this repo uses Django-CMS as an example.  You can pretty easily replace
-it with whatever Django-using application you want.
 
 Before building the image, you should either copy or link to one of the .env
 files, or create one of your own that has the same keys:
