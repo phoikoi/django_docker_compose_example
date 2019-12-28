@@ -14,6 +14,7 @@ class BaseModel(models.Model):
     class Meta:
         abstract = True
 
+
 class Member(BaseModel, AbstractUser):
     pass
 
@@ -23,13 +24,16 @@ class Member(BaseModel, AbstractUser):
             return f"{self.username} ({sa.get_provider_account().to_str()} from {sa.provider})"
         return self.username
 
+
 User = get_user_model()
+
 
 class UserProfile(BaseModel):
     user = models.OneToOneField(User, related_name='profile', on_delete=models.deletion.CASCADE)
 
     def __str__(self):
         return self.user.username
+
 
 @receiver(models.signals.post_save, sender=User, dispatch_uid='create_user_profile')
 def maybe_create_profile(sender, **kwargs):
