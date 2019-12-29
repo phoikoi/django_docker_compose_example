@@ -1,3 +1,4 @@
+import os
 import environ
 from pathlib import Path
 
@@ -9,7 +10,8 @@ CORE_DIR = Path(__file__).parent
 PROJECT_DIR = CORE_DIR.parent
 BASE_DIR = PROJECT_DIR.parent
 
-environ.Env.read_env(env_file=str(BASE_DIR / '.env'))
+ENV_FILE = str(Path(os.getenv("ENV_FILE", default=str(BASE_DIR / '.env'))).resolve())
+environ.Env.read_env(env_file=ENV_FILE)
 
 DEBUG = env.bool('DEBUG')
 
